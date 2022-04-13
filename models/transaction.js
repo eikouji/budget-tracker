@@ -1,3 +1,5 @@
+"use strict";
+
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -11,7 +13,7 @@ const transactionSchema = new Schema(
     },
     value: {
       type: Number,
-      required: "Enter an amount"
+      required: 'Enter an amount'
     },
     date: {
       type: Date,
@@ -20,6 +22,6 @@ const transactionSchema = new Schema(
   }
 );
 
-const Transaction = mongoose.model("Transaction", transactionSchema);
+const Transaction = mongoose.model(`Transaction`, transactionSchema);
 
 module.exports = Transaction;
