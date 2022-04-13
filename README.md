@@ -7,12 +7,17 @@ Features of this app:
 
 Deployment to Heroku using MongoDB Atlas
 
-Application includes:
+# Application includes: #
 - service worker
 - web manifest
 - IndexedDB for offline functionality
 - Deployment to Heroku
 
+# NPMS
+Compression
+Express
+Mongoose
+Morgan
 
 
 
