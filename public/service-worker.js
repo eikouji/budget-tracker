@@ -33,3 +33,32 @@ self.addEventListener(`activate`, event => {
                 )
                 .then() => self.clients())
 })
+
+// fetch event //
+
+self.addEventListener(`fetch`, event => {
+    if (
+        event.request.method !== `GET` ||
+        !event.request.url.startsWith(self.location.origin)
+    ) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
+    if (
+        event.request.url.includes(`/api/transaction`)) {
+            event.respondWith(
+                caches.ope(RUNTIME_CACHE).then(cache =>
+                    fetch(event.request)
+                    .then(response => {
+                        cach.put(event.request, response.clone());
+
+                    })
+                    .catch(() => caches.match(event.request ))
+                    )
+
+            );
+            return;
+        }
+    )
+})
