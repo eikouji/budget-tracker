@@ -1,3 +1,6 @@
+const APP_PREFIX = 'BudgetTracker-';
+const VERSION = 'version_01';
+const CACHE_NAME = APP_PREFIX + VERSION;
 
 console.log('service-worker.js file');
 
@@ -19,25 +22,34 @@ const FILES_TO_CACHE = [
 self.addEventListener(`activate`, event => {
     const currentCaches = [STATIC_CACHE, RUNTIME_CACHE];
     event.waitUntil(
-        catches
-          .keys()
-          .then(cacheNames =>
-            // returns array of cache names //
-            cacheNames.filter(cacheName => !currentCaches.includes(cacheName))
-            )
-            .then(cachesToDelete =>
-                Promise.all(
-                    // deletes caches //
-                    cachesToDelete.map(cacheToDelete => caches.toDelete();
-                    )
-                )
-                .then() => self.clients())
+        caches.keys().then(function (keyList) {
+          // keylist contains all cache names under username.github.io ///
+          // filter out the cache names that has this app prefix to the keeplist //
+          let cacheKeepList = keyList.filter(function (key) {
+              return key.indexOf(APP_PREFIX);
+          })
+          // add current cache name to keeplist //
+          cacheKeepList.push(CACHE_NAME);
+
+          return Promise.all(keyList.map(function (key, i) {
+            if (cacheKeeplist.indexOf(key) === -1) {
+              console.log('deleting cache : ' + keyList[i] );
+              return caches.delete(keyList[i]);
+            }
+          }));
+        })
 })
 
 // fetch event //
 
 self.addEventListener(`fetch`, event => {
-    if (
+    console.log('fetch request : ' + event.request.url)
+    event.respondWith(
+        caches.match(event.request).then(function (request) {
+    if (request) { // if cache is available, respond with cache //
+        console.log('responding with cache : ') + event.request.url)
+        return request
+    } else {
         event.request.method !== `GET` ||
         !event.request.url.startsWith(self.location.origin)
     ) {
@@ -60,5 +72,29 @@ self.addEventListener(`fetch`, event => {
             );
             return;
         }
+
+        // data is retrieved from cache //
+        event.respondWith(
+            caches.match(event.request).then(cachedResponse => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+
+                return cache 
+                  .open(RUNTIME_CACHE)
+                  .then(cache =>)
+            })
+        )
+
+
+        // cache resources //
+        self.addEventListener('install', function (event) {
+            event.waitUntil(
+                caches.open(CACHE_NAME).then(function (cache) {
+                    console.log('installing cache : ' + CACHE_NAME)
+                    return cache.addAll(FILES_TO_CACHE)
+                })
+            )
+        })
     )
 })
