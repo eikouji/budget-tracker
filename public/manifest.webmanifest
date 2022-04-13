@@ -1,0 +1,12 @@
+/* looks like a simplified package.json file */
+
+{
+    "short_name": "Budget-Tracker",
+    "name": "Budget-Tracker",
+
+    "start_url": "/",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "theme_color": "#ffffff"
+}
+
