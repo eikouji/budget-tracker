@@ -14,7 +14,7 @@ request.onupgradeneeded = event => {
 
 };
 
-function checkDataBase() {
+function checkDatabase() {
     const dataBase = request.result;
 
     // open a transaction on your db //
@@ -39,17 +39,32 @@ function checkDataBase() {
             })
             .then(response => response.json())
             .then(() => {
-                // success -> open transaction on db //
+               // open transaction on pending db //
+               transaction = db.transaction([pendingObjectStoreName], `readwrite`);
 
-                // access pending object store //
+               // access your pending object store //
+               store = transaction.objetStore(pendingObjectStoreName);
 
-                // clear store //
-
-            }
+               // clear all items from store //
+               store.clear();
+            };
         }
-    }
-}
+       };
 
+       // save records //
+       function saveRecord(record) {
+           const db = request.result;
+
+           // create a transaction on the pending db with readwrite access //
+           const transaction = db.transaction([pendingObjectStoreName], `readwrite`);
+           
+           // access your pending object store //
+           const store = transaction.objectSTore(pendingObjectStoreName);
+
+           // add record to your store //
+           store.add(record);
+        }
+}
 
 
 window.addEventListener('online', checkDatabase);
